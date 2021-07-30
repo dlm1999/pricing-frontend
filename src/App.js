@@ -1,52 +1,74 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './App.css';
-import * as ReactBootstrap from "react-bootstrap";
 
-const App = ()=> {
-  const items =[
-  {CommodityName: "paddy", VarietyName:"Common (Hamsa)", MarketName:"Narayanpet", Arrivals: "54", Maximum:"1420",Minimum: "1411", PurchaseBy: "PT"},
-  {CommodityName: "paddy", VarietyName:"Common (Hamsa)", MarketName:"Mahaboobnagar", Arrivals: "4", Maximum:"1457",Minimum: "1457", PurchaseBy: "PT"},
-  {CommodityName: "paddy", VarietyName:"Common (Hamsa)", MarketName:"Narayanpet", Arrivals: "54", Maximum:"1420",Minimum: "1411", PurchaseBy: "PT"},
-  {CommodityName: "paddy", VarietyName:"Common (Hamsa)", MarketName:"Mahaboobnagar", Arrivals: "4", Maximum:"1457",Minimum: "1457", PurchaseBy: "PT"},
-  {CommodityName: "paddy", VarietyName:"Common (Hamsa)", MarketName:"Narayanpet", Arrivals: "54", Maximum:"1420",Minimum: "1411", PurchaseBy: "PT"},
-  {CommodityName: "paddy", VarietyName:"Common (Hamsa)", MarketName:"Mahaboobnagar", Arrivals: "4", Maximum:"1457",Minimum: "1457", PurchaseBy: "PT"}
-  ]
-  const renderItem = (item, index) =>{
-    return(
-      <tr key = {index}>
-        <td>{item.CommodityName}</td>
-        <td>{item.VarietyName}</td>
-        <td>{item.MarketName}</td>
-        <td>{item.Arrivals}</td>
-        <td>{item.Maximum}</td>
-        <td>{item.Minimum}</td>       
-        <td>{item.PurchaseBy}</td>
-      </tr>
-    )                  
+
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      items: [],
+      isError: false
+    }
   }
-  return (
-    <div className="App">
-      <div className = "pa3">
-        <h1>Jeevamrut Pricing Table</h1>
-      </div>  
-    <ReactBootstrap.Table striped bordered hover>
-  <thead>
-    <tr>
-      <th>Commodity Name</th>
-      <th>Variety Name</th>
-      <th>Market Name</th>
-      <th>Arrivals(Qtls)</th>
-      <th>Maximum</th>
-      <th>Minimum</th>
-      <th>Purchase By</th>
-    </tr>
-  </thead>
-  <tbody>
-    {items.map(renderItem)}
-  </tbody>
-</ReactBootstrap.Table>
-    </div>
-  );
+  async componentDidMount() {
+    this.setState({ isLoading: true })
+    const response = await fetch('https://k7xtuyylg7.execute-api.us-east-2.amazonaws.com/Api_deploy')
+    if (response.ok) {
+      const items = await response.json()
+      console.log(items)
+    } else {
+      this.setState({ isError: true})
+    }
+  }
+
+ renderTableHeader = () => {
+    return Object.keys(this.state.items[0]).map(attr => <th key={attr}>{attr.toUpperCase()}</th>)
+  } 
+
+ renderTableRows = () => {
+    return this.state.items.map(item => {
+      return (
+        <tr key={item.id}>
+          <td>{item.CommodityName}</td>
+          <td>{item.VarietyName}</td>
+          <td>{item.MarketName}</td>
+          <td>{item.Arrivals}</td>
+          <td>{item.Maximum}</td>
+          <td>{item.Minimum}</td>       
+          <td>{item.PurchaseBy}</td>
+        </tr>
+      )
+    })
+  } 
+
+ render() {
+    const { items, isLoading, isError } = this.state
+
+    if (isError) {
+      return <div>Error</div>
+    }
+
+    return items.length > 0
+      ? (
+        <table>
+          <thead>
+            <tr>
+              {this.renderTableHeader()}
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderTableRows()}
+          </tbody>
+        </table>
+      ) : (
+        <div>
+          No item.
+      </div>
+      )
+  }
+
 }
+
+ 
 
 export default App;
