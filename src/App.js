@@ -17,10 +17,11 @@ class App extends Component {
   async handleClick(e) {
     console.log(this.state.value);
     const response =
-      await fetch('https://k7xtuyylg7.execute-api.us-east-2.amazonaws.com/Api_deploy/id/' + this.state.value)
+      await fetch('https://3ekbbuur03.execute-api.us-east-1.amazonaws.com/price/' + this.state.value)
     if (response.ok) {
-      const items = await response.json()
-      console.log(items)
+      const data = await response.json()
+      console.log(data.Items)
+      this.setState({items : data.Items})
     } else {
       this.setState({ isError: true })
     }

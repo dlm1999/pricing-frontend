@@ -8,34 +8,34 @@ class Table extends Component {
       isError: false
     }
   }
-  async componentDidMount() {
-    this.state = {
-      items : this.props.items
+  componentDidMount() {
+    this.setState = {
+      items: this.props.items
     }
   }
 
- renderTableHeader = () => {
+  renderTableHeader = () => {
     return Object.keys(this.state.items[0]).map(attr => <th key={attr}>{attr.toUpperCase()}</th>)
-  } 
+  }
 
- renderTableRows = () => {
+  renderTableRows = () => {
     return this.state.items.map(item => {
       return (
         <tr key={item.id}>
-          <td>{item.CommodityName}</td>
-          <td>{item.VarietyName}</td>
+          <td>{item.commodityName}</td>
+          {/* <td>{item.VarietyName}</td>
           <td>{item.MarketName}</td>
           <td>{item.Arrivals}</td>
           <td>{item.Maximum}</td>
           <td>{item.Minimum}</td>       
-          <td>{item.PurchaseBy}</td>
+          <td>{item.PurchaseBy}</td> */}
         </tr>
       )
     })
-  } 
+  }
 
- render() {
-    const { items,isError } = this.state
+  render() {
+    const { items, isError } = this.state
 
     if (isError) {
       return <div>Error</div>
@@ -56,12 +56,12 @@ class Table extends Component {
       ) : (
         <div>
           No item.
-      </div>
+        </div>
       )
   }
 
 }
 
- 
+
 
 export default Table;
