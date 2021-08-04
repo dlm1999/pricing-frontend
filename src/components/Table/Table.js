@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-
-
 class Table extends Component {
   constructor(props) {
     super(props)
@@ -11,12 +9,8 @@ class Table extends Component {
     }
   }
   async componentDidMount() {
-    const response = await fetch('https://k7xtuyylg7.execute-api.us-east-2.amazonaws.com/Api_deploy')
-    if (response.ok) {
-      const items = await response.json()
-      console.log(items)
-    } else {
-      this.setState({ isError: true})
+    this.state = {
+      items : this.props.items
     }
   }
 
