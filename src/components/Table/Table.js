@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as ReactBootStrap from "react-bootstrap";
 
 class Table extends Component {
   constructor(props) {
@@ -8,9 +9,15 @@ class Table extends Component {
       isError: false
     }
   }
-  componentDidMount() {
-    this.setState = {
-      items: this.props.items
+  async componentDidMount() {
+    const response =
+      await fetch('https://y5ujgva9k3.execute-api.us-east-2.amazonaws.com/price/' + this.props.value)
+    if (response.ok) {
+      const data = await response.json()
+      console.log(data.Items)
+      this.setState({ items: data.Items })
+    } else {
+      this.setState({ isError: true })
     }
   }
 
@@ -19,16 +26,20 @@ class Table extends Component {
   }
 
   renderTableRows = () => {
+    console.log(this.state.items);
     return this.state.items.map(item => {
       return (
         <tr key={item.id}>
+          <td>{item.model}</td>
+          <td>{item.marketName}</td>
           <td>{item.commodityName}</td>
-          {/* <td>{item.VarietyName}</td>
-          <td>{item.MarketName}</td>
-          <td>{item.Arrivals}</td>
-          <td>{item.Maximum}</td>
-          <td>{item.Minimum}</td>       
-          <td>{item.PurchaseBy}</td> */}
+          <td>{item.maximum}</td>
+          <td>{item.varietyName}</td>
+          <td>{item.purchaseBy}</td>
+          <td>{item.minimum}</td>
+          <td>{item.dateVal}</td>
+          <td>{item.id}</td>
+          <td>{item.arrivals}</td> 
         </tr>
       )
     })
@@ -43,7 +54,7 @@ class Table extends Component {
 
     return items.length > 0
       ? (
-        <table>
+        <ReactBootStrap.Table striped bordered hover>
           <thead>
             <tr>
               {this.renderTableHeader()}
@@ -52,7 +63,7 @@ class Table extends Component {
           <tbody>
             {this.renderTableRows()}
           </tbody>
-        </table>
+        </ReactBootStrap.Table>
       ) : (
         <div>
           No item.

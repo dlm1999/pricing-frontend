@@ -8,23 +8,15 @@ class App extends Component {
     super(props)
     this.state = {
       value: '',
-      items: []
+      items: [],
+      click : false
     }
   }
   handleChange(e) {
     this.setState({ value: e.target.value })
   }
   async handleClick(e) {
-    console.log(this.state.value);
-    const response =
-      await fetch('https://3ekbbuur03.execute-api.us-east-1.amazonaws.com/price/' + this.state.value)
-    if (response.ok) {
-      const data = await response.json()
-      console.log(data.Items)
-      this.setState({items : data.Items})
-    } else {
-      this.setState({ isError: true })
-    }
+    this.setState({click : true})
   }
   render() {
     return (
@@ -33,7 +25,10 @@ class App extends Component {
           <input value={this.state.value} onChange={(e) => { this.handleChange(e) }} />
           <button onClick={this.handleClick.bind(this)}>Go !</button>
         </div>
-        <Table items = {this.state.items}/>
+        <div>
+          <h1>Jeevamrut Pricing Table</h1>
+        </div>
+        {this.state.click ? <Table value = {this.state.value}></Table> : ""}      
       </div>
     );
   }
