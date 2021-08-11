@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Table from './components/Table/Table';
+import ToolkitProvider, { CSVExport} from 'react-bootstrap-table2-toolkit';
 
 class App extends Component {
 
@@ -12,12 +13,14 @@ class App extends Component {
       click : false
     }
   }
+
   handleChange(e) {
     this.setState({ value: e.target.value })
   }
   async handleClick(e) {
     this.setState({click : true})
   }
+
   render() {
     return (
       <div className='App'>
